@@ -48,7 +48,7 @@ describe("Database Manager", function() {
       var user_id = results.id;
       databaseManager.addResponse({user_id: user_id, event_id: event_id}).then(function(results){
         models.RSVP.findAll().then(function(results){
-          expect(results.length).toEqual(1);
+          expect(results.length).toEqual(0);
           done();
         });
       });

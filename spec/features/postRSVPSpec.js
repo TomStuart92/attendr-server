@@ -4,7 +4,7 @@ var request = require('request');
 var server = require('../../index.js');
 var databaseCleaner = require('../support/cleaner');
 
-describe('postUsers', function() {
+describe('postRSVP', function() {
   beforeEach(function(done) {
     server.listen(3000);
     var user = {first:'Elizabeth', last:'Coffee', email:'test@example.com', pic:'123', gender:'F', age: '14'}
@@ -31,7 +31,7 @@ describe('postUsers', function() {
   });
 
 
-  it('adds a user to DB',function(done){
+  it('adds a RSVP to DB',function(done){
     var options = {url: 'http://localhost:3000/response/new',
                    method: "POST",
                    body: "user_id="+user_id+"&event_id="+event_id}
@@ -43,4 +43,21 @@ describe('postUsers', function() {
       })
     });
   });
+
+  it('deletes an RSVP on second request',function(done){
+    var options = {url: 'http://localhost:3000/response/new',
+                   method: "POST",
+                   body: "user_id="+user_id+"&event_id="+event_id}
+
+    request(options, function(error, response, body) {
+      request(options, function(error, response, body) {
+      models.RSVP.findAll().then(function(results){
+        expect(results.length).toEqual(0);
+        done();
+      })
+      })
+    });
+  });
+
+
 });
